@@ -2,7 +2,7 @@
   <q-page>
     <div
       class="row justify-center no-wrap text-white bg-image"
-      style="width: 100%; margin-top: -110px"
+      style="width: 100%; margin-top: -110px; background: url('bg1.png')"
     >
       <div
         class="row col-12 col-sm-12 col-md-12 justify-center"
@@ -17,7 +17,7 @@
             {{ t("message.slogan") }}
           </div>
           <div class="font-t16 text-center text-grey-5 q-mt-sm">
-             {{ t("message.slogan1") }}
+            {{ t("message.slogan1") }}
           </div>
           <q-form
             @submit="submitSearch"
@@ -75,19 +75,19 @@
           <div>
             <img src="../assets/feature_pic_1.png" style="object-fit: none" />
           </div>
-          <div class="font-t40 text-weight-bold">{{ t("message.feature1") }}</div>
-          <div class="q-ma-md">{{ t("message.detail1") }}
-
+          <div class="font-t40 text-weight-bold">
+            {{ t("message.feature1") }}
           </div>
+          <div class="q-ma-md">{{ t("message.detail1") }}</div>
         </div>
         <div class="col-12 col-md-3 column text-center">
           <div>
             <img src="../assets/feature_pic_2.png" style="object-fit: none" />
           </div>
-          <div class="font-t40 text-weight-bold">{{ t("message.feature2") }}</div>
-          <div class="q-ma-md">{{ t("message.detail2") }}
-
+          <div class="font-t40 text-weight-bold">
+            {{ t("message.feature2") }}
           </div>
+          <div class="q-ma-md">{{ t("message.detail2") }}</div>
         </div>
         <div class="col-12 col-md-3 column text-center">
           <div>
@@ -96,9 +96,7 @@
           <div class="font-t40 text-weight-bold">
             {{ t("message.feature3") }}
           </div>
-          <div class="q-ma-md">{{ t("message.detail3") }}
-
-          </div>
+          <div class="q-ma-md">{{ t("message.detail3") }}</div>
         </div>
       </div>
     </div>
@@ -112,9 +110,7 @@
           <div class="font-t40 text-weight-bold q-ma-lg">
             {{ t("message.feature4") }}
           </div>
-          <div class="q-ma-lg">{{ t("message.detail4") }}
-
-          </div>
+          <div class="q-ma-lg">{{ t("message.detail4") }}</div>
           <q-btn
             dense
             no-caps
@@ -125,36 +121,40 @@
         <div class="col"><img src="../assets/group322.png" /></div>
       </div>
     </div>
-     <!-- FAQ --->
-     <div class="row justify-center no-wrap" style="width: 100%;background:#EDFDEF;">
+    <!-- FAQ --->
+    <div
+      class="row justify-center no-wrap"
+      style="width: 100%; background: #edfdef"
+    >
       <div
         class="col-12 col-md-8 text-center font-t24 no-wrap q-gutter-lg"
         style="margin-top: 80px"
       >
-      <div class="text-center font-t36">FAQ</div>
-  <div class="q-pa-md" >
-    <q-list >
-      <div v-for="index in 5" :key="index">
-      <q-expansion-item
-        group="somegroup"
-        :label="t(`message.faq_q${index}`)"
-        header-class="font-t22 text-weight-bold"
-      >
-        <q-card>
-          <q-card-section class="font-t20" v-html="t(`message.faq_a${index}`)">
+        <div class="text-center font-t36">FAQ</div>
+        <div class="q-pa-md">
+          <q-list>
+            <div v-for="index in 5" :key="index">
+              <q-expansion-item
+                group="somegroup"
+                :label="t(`message.faq_q${index}`)"
+                header-class="font-t22 text-weight-bold"
+              >
+                <q-card>
+                  <q-card-section
+                    class="font-t20"
+                    v-html="t(`message.faq_a${index}`)"
+                  >
+                  </q-card-section>
+                </q-card>
+              </q-expansion-item>
 
-          </q-card-section>
-        </q-card>
-      </q-expansion-item>
-
-      <q-separator />
+              <q-separator />
+            </div>
+          </q-list>
+        </div>
       </div>
-    </q-list>
-  </div>
-
-      </div>
-      </div>
-      <pageFooter/>
+    </div>
+    <pageFooter />
   </q-page>
 </template>
 
@@ -164,7 +164,7 @@ import { useI18n } from "vue-i18n";
 import { useQuasar } from "quasar";
 import { tools } from "../utils/tools";
 import { useRouter, useRoute } from "vue-router";
-import pageFooter from "src/components/pageFooter.vue"
+import pageFooter from "src/components/pageFooter.vue";
 const { t } = useI18n();
 const isMobile = useQuasar().platform.is.mobile;
 const queryNid = ref("");
@@ -179,8 +179,4 @@ function submitSearch() {
   router.push("/search?nid=" + queryNid.value);
 }
 </script>
-<style>
-.bg-image{
-  background: url("/bg1.png");
-}
-</style>
+<style></style>
