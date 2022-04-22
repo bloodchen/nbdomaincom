@@ -97,7 +97,7 @@ async function buyDomain(item) {
   };
   const obj = tools.getKV("CurDomain");
   if (!obj.domain) {
-    alert("You must login to an existing NBdomain first");
+    alert("You must login to a ." + item.domain.split(".")[1] + " NBdomain ");
     return;
   }
   if (obj.domain == item.domain) {
