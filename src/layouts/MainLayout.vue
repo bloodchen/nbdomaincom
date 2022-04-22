@@ -4,34 +4,35 @@
       <q-toolbar class="text-white q-mx-lg" style="height: 110px">
         <div class="row justify-between no-wrap col-12">
           <div class="col-2">
-            <a href="./"
-              ><img src="../assets/logo_white.png"
-            /></a>
+            <a href="./"><img src="../assets/logo_white.png" /></a>
           </div>
-          <div class="row justify-center col items-center"  v-if="!this.$q.platform.is.mobile">
+          <div
+            class="row justify-center col items-center"
+            v-if="!$q.platform.is.mobile"
+          >
             <a
               href="#/search"
               class="text-white q-mx-lg"
               style="text-decoration: none; margin-left: 100px"
-              >{{t('message.nav1')}}</a
+              >{{ t("message.nav1") }}</a
             >
             <a
               href="#/free"
               class="text-white q-mx-lg"
               style="text-decoration: none"
-              >{{t('message.nav2')}}</a
+              >{{ t("message.nav2") }}</a
             >
             <a
               href="https://docs.nbdomain.com"
               target="_blank"
               class="text-white q-mx-lg"
               style="text-decoration: none"
-              >{{t('message.nav3')}}</a
+              >{{ t("message.nav3") }}</a
             >
           </div>
-          <div class="col-3 row justify-round items-center" >
-            <lanuage v-if="!this.$q.platform.is.mobile"/>
-            <div v-if="!this.$q.platform.is.mobile">
+          <div class="col-3 row justify-round items-center">
+            <lanuage v-if="!$q.platform.is.mobile" />
+            <div v-if="!$q.platform.is.mobile">
               <q-btn
                 dense
                 no-caps
@@ -55,7 +56,7 @@
                 v-else
               />
             </div>
-            <div v-if="this.$q.platform.is.mobile">
+            <div v-if="$q.platform.is.mobile">
               <q-btn
                 flat
                 @click="leftDrawer = !leftDrawer"
@@ -86,43 +87,42 @@
             no-swipe-close
             no-swipe-backdrop
             :active="index == activePage"
-
             @click="onclick(index)"
           >
-           <!-- <q-item-section avatar v-if="menuItem.icon" class="tc-4">
+            <!-- <q-item-section avatar v-if="menuItem.icon" class="tc-4">
               <q-icon :name="menuItem.icon" />
             </q-item-section>-->
-            <q-item-section class="font-t16 text-black ">{{
+            <q-item-section class="font-t16 text-black">{{
               t(menuItem.label)
             }}</q-item-section>
           </q-item>
 
           <q-separator v-if="menuItem.separator" class="q-my-md" />
         </q-list>
-        <lanuage/>
-            <div >
-              <q-btn
-                dense
-                no-caps
-                class="q-ml-md q-px-md q-mt-md bg-primary"
-                text-color="tc-2"
-                icon="perm_identity"
-                :label="t('message.login')"
-                @click="$router.push('detail')"
-                v-if="!currentDomain?.domain"
-              />
-              <q-btn
-                class="text-black q-px-sm q-mt-md"
-                no-caps
-                unelevated
-                dense
-                flat
-                icon="perm_identity"
-                @click="$router.push('detail')"
-                :label="currentDomain.domain"
-                v-else
-              />
-            </div>
+        <lanuage />
+        <div>
+          <q-btn
+            dense
+            no-caps
+            class="q-ml-md q-px-md q-mt-md bg-primary"
+            text-color="tc-2"
+            icon="perm_identity"
+            :label="t('message.login')"
+            @click="$router.push('detail')"
+            v-if="!currentDomain?.domain"
+          />
+          <q-btn
+            class="text-black q-px-sm q-mt-md"
+            no-caps
+            unelevated
+            dense
+            flat
+            icon="perm_identity"
+            @click="$router.push('detail')"
+            :label="currentDomain.domain"
+            v-else
+          />
+        </div>
       </q-scroll-area>
     </q-drawer>
     <q-page-container>
@@ -142,10 +142,12 @@ import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter, useRoute } from "vue-router";
 import { tools, Updater } from "../utils/tools";
+import { useQuasar } from "quasar";
+
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-
+const $q = useQuasar();
 const activePage = -1;
 const leftDrawer = ref(false);
 const link = "home";
