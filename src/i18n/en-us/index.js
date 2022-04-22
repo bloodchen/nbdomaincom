@@ -13,15 +13,12 @@ export default {
     //-------------MyDomains-------------------
     makePublic: "Set as Public",
     makePublicWarning: "'Set it public' means anyone can write value to this domain (it still belong to you.) It cannot be undone. Continue ?",
-
     clearData: "Clear Existing Data",
     tradeFee: "including 10% admin fee",
     buyDomain: "Buy Domain",
     price: 'Price',
     expireDate: 'Expire Date',
     askLogin: "Please Login",
-
-
     //------------Search-----------------------
     agree1: "Agree to NBdomain",
     agreement: "Agreement",
@@ -29,6 +26,12 @@ export default {
     titleSearch: "Search Domain:",
     notOpen: "Not Open",
     registered: "Registered",
+    //------------FreeDomain-------------------------
+    freeTitle: "4 steps to own a Free NBdomain forever",
+    freestep1: "Download and open Maxthon Browser",
+    freestep2: "Open the Vbox applet (at upper-right corner or homepage)",
+    freestep3: "Register Vbox cloud account with your mobile phone number",
+    freestep4: "Get free NBdomains on every supported blockchains",
     //------------Home-------------------------
     slogan: "Born for the Decentrolized Web",
     slogan1: "Once registered, no yearly renewal required",

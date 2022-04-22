@@ -4,7 +4,11 @@
       <q-toolbar class="text-white q-mx-lg" style="height: 110px">
         <div class="row justify-between no-wrap col-12">
           <div class="col-2">
-            <a href="./"><img src="../assets/logo_white.png" /></a>
+            <a href="./"
+              ><img
+                src="../assets/logo_white.png"
+                srcset="../assets/logo_white@2x.png 2x"
+            /></a>
           </div>
           <div
             class="row justify-center col items-center"
@@ -79,7 +83,11 @@
       content-class="bg-c1"
     >
       <q-scroll-area class="fit q-py-lg font-t16">
-        <img src="../assets/logo_black.png" class="q-ma-md" />
+        <img
+          src="../assets/logo_black.png"
+          srcset="../assets/logo_black@2x.png 2x"
+          class="q-ma-md"
+        />
         <q-list v-for="(menuItem, index) in menuList" :key="index">
           <q-item
             clickable

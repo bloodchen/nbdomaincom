@@ -73,7 +73,11 @@
       >
         <div class="col-12 col-md-3 column text-center">
           <div>
-            <img src="../assets/feature_pic_1.png" style="object-fit: none" />
+            <img
+              src="../assets/feature_pic_1.png"
+              srcset="../assets/feature_pic_1@2x.png 2x"
+              style="object-fit: none"
+            />
           </div>
           <div class="font-t40 text-weight-bold">
             {{ t("message.feature1") }}
@@ -82,7 +86,11 @@
         </div>
         <div class="col-12 col-md-3 column text-center">
           <div>
-            <img src="../assets/feature_pic_2.png" style="object-fit: none" />
+            <img
+              src="../assets/feature_pic_2.png"
+              srcset="../assets/feature_pic_2@2x.png 2x"
+              style="object-fit: none"
+            />
           </div>
           <div class="font-t40 text-weight-bold">
             {{ t("message.feature2") }}
@@ -91,7 +99,11 @@
         </div>
         <div class="col-12 col-md-3 column text-center">
           <div>
-            <img src="../assets/feature_pic_3.png" style="object-fit: none" />
+            <img
+              src="../assets/feature_pic_3.png"
+              srcset="../assets/feature_pic_3@2x.png 2x"
+              style="object-fit: none"
+            />
           </div>
           <div class="font-t40 text-weight-bold">
             {{ t("message.feature3") }}
@@ -118,7 +130,12 @@
             :label="t('message.learnmore')"
           />
         </div>
-        <div class="col"><img src="../assets/group322.png" /></div>
+        <div class="col">
+          <img
+            src="../assets/group322.png"
+            srcset="../assets/group322@2x.png 2x"
+          />
+        </div>
       </div>
     </div>
     <!-- FAQ --->

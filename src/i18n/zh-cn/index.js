@@ -22,6 +22,12 @@ export default {
     titleSearch: "搜索域名:",
     notOpen: "未开放",
     registered: "已注册",
+    //------------FreeDomain-------------------------
+    freeTitle: "仅需4步即可拥有永不过期的 NB域名",
+    freestep1: "下载并运行傲游浏览器",
+    freestep2: "打开 Vbox （位于右上角按钮或者主页按钮）",
+    freestep3: "使用手机号注册vbox账号",
+    freestep4: "得到免费的 NB域名",
     //------------Home-------------------------
     slogan: "NB域名，重塑互联网",
     slogan1: "一次注册, 终身拥有",
