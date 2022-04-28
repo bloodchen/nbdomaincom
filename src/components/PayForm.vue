@@ -47,7 +47,7 @@ async function initCMD() {
   opay.setUI({ border: "0px", background: "white", close: false });
   opay.changeContainer("pay");
   console.log("cmd=", payCmd);
-  if (cmd.cmd == "key" || cmd.cmd == "user") {
+  if (cmd.cmd == "key") {
     const domain = await tools.nblib.getDomain(cmd.domain);
     if (domain) {
       const res =
@@ -55,6 +55,17 @@ async function initCMD() {
           ? await domain.updateKey2({ kv: cmd.kv })
           : await domain.updateUser(cmd.kv);
       console.log("key cmd result:", res);
+      handleReply(res);
+    }
+  }
+  if (cmd.cmd == "user") {
+    const domain = await tools.nblib.getDomain(cmd.domain);
+    if (domain) {
+      const res = await domain.updateUser({
+        name: cmd.kv.name,
+        publicKey: cmd.kv.publicKey,
+      });
+      console.log("user cmd result:", res);
       handleReply(res);
     }
   }

@@ -64,7 +64,7 @@ const emit = defineEmits(["hideUserUpdate"]);
 const { t } = useI18n();
 let key = ref(props.userName);
 
-let val = props.value ? ref(JSON.parse(props.value).publicKey) : "";
+let val = props.value ? ref(JSON.parse(props.value).publicKey) : ref("");
 const curDomain = tools.getKV("CurDomain");
 
 function handleUpdate() {
@@ -72,7 +72,7 @@ function handleUpdate() {
   tools.setKV("paycmd", {
     domain: curDomain.domain,
     cmd: "user",
-    kv: { account: key.value, publicKey: val.value },
+    kv: { name: key.value, publicKey: val.value },
   });
   emit("hideUserUpdate");
 }
