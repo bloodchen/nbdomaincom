@@ -1,6 +1,10 @@
 <template>
   <q-page>
-    <div class="row justify-center q-mb-lg" v-if="showLogin" style="margin-top:100px">
+    <div
+      class="row justify-center q-mb-lg"
+      v-if="showLogin"
+      style="margin-top: 100px"
+    >
       <LoginForm @closeLoginForm="closeLoginForm" @showPay="showPay" />
     </div>
 
@@ -41,7 +45,8 @@
           </div>
           <div class="row">
             <div>
-              <a href=""
+              <a
+                href=""
                 class="tc-8 text-weight-bold q-mx-sm"
                 @click.prevent="onMakePublic"
                 >{{ t("message.makePublic") }}
@@ -53,9 +58,12 @@
               />
             </div>
 
-            <a href="" class="tc-8 text-weight-bold q-mx-md" @click.prevent="onSell">{{
-              t("message.sell")
-            }}</a>
+            <a
+              href=""
+              class="tc-8 text-weight-bold q-mx-md"
+              @click.prevent="onSell"
+              >{{ t("message.sell") }}</a
+            >
           </div>
         </div>
         <!--paymail plus--
@@ -146,6 +154,56 @@
             </div>
           </q-expansion-item>
         </div>
+        <!---------Accounts---------->
+        <div>
+          <q-expansion-item class="q-mb-sm bg-c6 nb-rounded">
+            <template v-slot:header>
+              <q-item-section>
+                <span class="q-mx-sm tc-1 text-weight-bold">
+                  {{ t("message.account") }} &nbsp;&nbsp;&nbsp;&nbsp;
+                  {{ Object.keys(userNames).length + 1 }}
+                </span>
+              </q-item-section>
+
+              <q-item-section side>
+                <q-btn
+                  class="bg-primary tc-2 q-px-md"
+                  no-caps
+                  style="width: 120px"
+                  :label="t('message.add')"
+                  @click.stop="handleUserUpdate('', '')"
+                />
+              </q-item-section>
+            </template>
+            <div class="text-weight-bold q-pa-md col-12">
+              root@{{ CurDomain?.domain }} - default
+            </div>
+
+            <div
+              class="bg-white q-pa-sm q-my-sm"
+              style="border: 1px solid #d3d8d4; opacity: 1; border-radius: 8px"
+              v-for="(value, name, index) in userNames"
+              :key="index"
+              @click="handleUserUpdate(value, name)"
+            >
+              <div class="row">
+                <div
+                  class="text-weight-bold q-pa-md col-12"
+                  style="border-bottom: 1px solid gainsboro"
+                >
+                  {{ name }}@{{ CurDomain?.domain }}
+                </div>
+
+                <div
+                  class="q-px-md q-my-md ellipsis col-12"
+                  style="max-width: 1000px"
+                >
+                  {{ value }}
+                </div>
+              </div>
+            </div>
+          </q-expansion-item>
+        </div>
       </div>
     </div>
 
@@ -163,27 +221,26 @@
 
     <!------支付------->
     <q-dialog v-model="showPayForm" persistent>
-      <PayForm :privateKey="privateKey" @closePayForm="closePayForm" />
+      <PayForm @closePayForm="closePayForm" />
     </q-dialog>
-    <!------Add Paymail------
-    <q-dialog v-model="showAddPaymail" persistent>
-      <AddPaymail
-        :username="currentPaymailUserName"
-        :currentValue="currentPaymailValue"
-        @closePaymail="closePaymail"
-      />
-    </q-dialog>-->
 
-    <!--    子域名-->
+    <!--    子域名 -->
     <q-dialog v-model="showChildDomainUpdate" persistent>
       <ChildDomainUpdate
         :childDomainName="childDomainName"
         :childDomainValue="childDomainValue"
-        isUpdate="true"
         @hideChildDomainUpdate="hideChildDomainUpdate"
       />
     </q-dialog>
-    <pageFooter/>
+    <!--    用户账户 -->
+    <q-dialog v-model="showUserUpdate" persistent>
+      <AddUser
+        :userName="userName"
+        :value="userNameValue"
+        @hideUserUpdate="hideUserUpdate"
+      />
+    </q-dialog>
+    <pageFooter />
   </q-page>
 </template>
 
@@ -193,10 +250,9 @@ import { tools, Updater } from "../utils/tools";
 import PayForm from "src/components/PayForm.vue";
 import SellForm from "src/components/SellForm.vue";
 import ChildDomainUpdate from "src/components/ChildDomainUpdate.vue";
-//import AddPaymail from "src/components/AddPaymail";
-//import AddWebsite from "src/components/AddWebsite";
+import AddUser from "src/components/addUser.vue";
 import LoginForm from "src/components/LoginForm.vue";
-import pageFooter from "src/components/pageFooter.vue"
+import pageFooter from "src/components/pageFooter.vue";
 import { useI18n } from "vue-i18n";
 import { useQuasar, Dialog } from "quasar";
 const { t } = useI18n();
@@ -207,18 +263,25 @@ let showAddPaymail = false,
   showTransferForm = ref(false),
   showPayForm = ref(false),
   showChildDomainUpdate = ref(false),
-  transaction = null,
-  privateKey = null,
   childDomainName = ref(null),
   childDomainValue = ref(null),
-  currentPaymailUserName = "",
-  currentPaymailValue = "";
+  showUserUpdate = ref(false),
+  userName = ref(null),
+  userNameValue = ref(null);
+
 let CurDomain = ref({});
 CurDomain.value = tools.getKV("CurDomain");
 if (!CurDomain.value?.obj) {
   showLogin.value = true;
 }
 
+const userNames = computed(() => {
+  if (CurDomain.value.obj === undefined || CurDomain.value.obj == null) {
+    return {};
+  }
+  console.log("users", CurDomain.value.obj.users);
+  return CurDomain.value.obj.users;
+});
 const keys_of_domain = computed(() => {
   if (CurDomain.value.obj === undefined || CurDomain.value.obj == null) {
     return [];
@@ -235,41 +298,6 @@ const num_of_keys = computed(() => {
 });
 function onHelp() {
   window.open("https://nbdomain.com");
-}
-function websites() {
-  let retObj = [];
-  if (CurDomain.value.obj) {
-    const users = CurDomain.value.obj.keys;
-    //console.log(users);
-    const keys = Object.keys(users);
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i];
-      const obj = users[key];
-      let aa = {};
-      aa[key] = obj;
-      if (obj.t == "web") retObj.push(aa);
-    }
-  }
-  console.log(retObj);
-  return retObj;
-}
-function paymails() {
-  let retObj = [];
-  if (CurDomain.value.obj) {
-    const users = CurDomain.value.obj.users;
-    //console.log(users);
-    const keys = Object.keys(users);
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i];
-      const obj = users[key];
-      //console.log("user=="+obj);
-      let aa = {};
-      aa[key] = obj;
-      if (obj.t == "pay") retObj.push(aa);
-    }
-  }
-  console.log(retObj);
-  return retObj;
 }
 
 function logOut() {
@@ -309,6 +337,12 @@ function handleChildDomainUpdate(value, name) {
   childDomainName.value = name;
   childDomainValue.value = value === "" ? "" : JSON.stringify(value);
   showChildDomainUpdate.value = true;
+}
+function handleUserUpdate(value, name) {
+  console.log(value);
+  userName.value = name;
+  userNameValue.value = value === "" ? "" : JSON.stringify(value);
+  showUserUpdate.value = true;
 }
 
 function showPay() {
@@ -359,17 +393,6 @@ function acceptDataComplete() {
   showTransferForm.value = false;
   showPay();
 }
-function onAddPaymail() {
-  currentPaymailUserName = "";
-  showAddPaymail = true;
-}
-function onAddChildDomain() {
-  showChildDomainUpdate.value = true;
-}
-function hideAddPaymail() {
-  showAddPaymail = false;
-  showPay();
-}
 /**
  * 更新子域名的验证
  */
@@ -379,6 +402,13 @@ function hideChildDomainUpdate() {
   showPay();
 }
 
+/**
+ * 更新子域名的验证
+ */
+function hideUserUpdate() {
+  showUserUpdate.value = false;
+  showPay();
+}
 function closePayForm() {
   console.log("got closePayForm");
   showPayForm.value = false;

@@ -11,6 +11,8 @@ export default {
     community: "Community",
 
     //-------------MyDomains-------------------
+    account: "Account",
+
     makePublic: "Set as Public",
     makePublicWarning: "'Set it public' means anyone can write value to this domain (it still belong to you.) It cannot be undone. Continue ?",
     clearData: "Clear Existing Data",

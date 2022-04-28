@@ -11,6 +11,7 @@ export default {
     community: "社区",
 
     //-------------MyDomains-------------------
+    account: "账号",
     makePublic: "设为公众域名",
     makePublicWarning: "'公众域名' 意味者任何人都可以设置此域名的内容。（域名还是属于你）. 此操作无法撤销。是否继续？",
 
