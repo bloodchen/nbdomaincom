@@ -9,40 +9,62 @@
         <q-card-section class="text-weight-bold font-t16">
           Domains For Sale
         </q-card-section>
-        <div
-          v-for="item of onSaleDomains"
-          :key="item"
-          class="row justify-between q-mt-md"
+        <q-tabs
+          v-model="selected_tab"
+          class="text-black"
+          align="left"
+          no-caps
+          indicator-color="primary"
         >
-          <div class="col-9 font-t16 text-primary">
-            <div class="row justify-start">
-              <div class="col-1">
-                <img :src="getIcon(item.domain)" style="width: 16px" />
-              </div>
-              <div class="col">
-                <div class="font-t16">{{ item.domain }}</div>
-                <div class="font-t12 text-grey-6">
-                  {{ item.sell_info.note }}
+          <q-tab
+            v-for="[index, result] of ['.b', '.a'].entries()"
+            :name="result"
+            :label="result"
+            :key="index"
+          />
+        </q-tabs>
+        <q-tab-panels v-model="selected_tab" animated>
+          <q-tab-panel
+            v-for="[index, result] of ['.b', '.a'].entries()"
+            :name="result"
+            :key="index"
+          >
+            <div
+              v-for="item of onSaleDomains[result]"
+              :key="item"
+              class="row justify-between q-mt-md"
+            >
+              <div class="col-9 font-t16 text-primary">
+                <div class="row justify-start">
+                  <div class="col-1">
+                    <img :src="getIcon(item.domain)" style="width: 16px" />
+                  </div>
+                  <div class="col">
+                    <div class="font-t16">{{ item.domain }}</div>
+                    <div class="font-t12 text-grey-6">
+                      {{ item.sell_info.note }}
+                    </div>
+                  </div>
+                  <div>
+                    {{ getPrice(item) }}
+                  </div>
                 </div>
               </div>
+
               <div>
-                {{ getPrice(item) }}
+                <q-btn
+                  :label="t('message.buy')"
+                  outline
+                  color="primary"
+                  class="q-px-lg"
+                  size="md"
+                  @click="buyDomain(item)"
+                  no-caps
+                />
               </div>
             </div>
-          </div>
-
-          <div>
-            <q-btn
-              :label="t('message.buy')"
-              outline
-              color="primary"
-              class="q-px-lg"
-              size="md"
-              @click="buyDomain(item)"
-              no-caps
-            />
-          </div>
-        </div>
+          </q-tab-panel>
+        </q-tab-panels>
       </q-card>
     </div>
     <q-dialog v-model="showBuyDomain" persistent>
@@ -59,12 +81,19 @@ import { useQuasar } from "quasar";
 import PayForm from "src/components/PayForm.vue";
 const { t } = useI18n();
 const q = useQuasar();
-const onSaleDomains = ref([]);
+const onSaleDomains = ref({});
 const showBuyDomain = ref(false);
-let note = ref("");
+let note = ref(""),
+  selected_tab = ref(".b");
 start();
 tools.get_onSale().then((res) => {
-  onSaleDomains.value = res;
+  //onSaleDomains.value = res;
+  const all = onSaleDomains.value;
+  for (const item of res) {
+    const tld = "." + item.domain.split(".")[1];
+    if (!all[tld]) all[tld] = [];
+    all[tld].push(item);
+  }
 });
 async function start() {
   console.log("start...");
