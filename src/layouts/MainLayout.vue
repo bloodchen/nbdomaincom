@@ -195,7 +195,7 @@ Updater.sub((event, data) => {
 });
 function onclick(index) {
   console.log("onclick:", index);
-  const item = this.menuList[index];
+  const item = menuList[index];
   if (item.to) {
     console.log("1");
     router.push(item.to);
