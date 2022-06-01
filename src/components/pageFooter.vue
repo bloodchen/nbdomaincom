@@ -25,7 +25,7 @@
             <a href="https://doc.nbdomain.com" target="_blank"
               >Developer Docs</a
             >
-            <a href="https://forum.nbdomain.com" target="_blank">Forum</a>
+            <a href="https://c.nbdomain.com" target="_blank">Forum</a>
             <a href="https://doc.nbdomain.com" target="_blank">Product FAQs</a>
           </div>
         </div>

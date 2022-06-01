@@ -55,7 +55,7 @@ export default {
     faq_q4: "What wallet can be used to operate NBdomain?",
     faq_a4: "You can use the VBox wallet in Maxthon browser: <a href='https://maxthon.com' target='_blank'>maxthon.com</a> .",
     faq_q5: "What if I have more questions?",
-    faq_a5: "You are welcome to join our :  <a href='https://discord.gg/WRcEGjMA' target='_blank'>discord server</a> ",
+    faq_a5: "You are welcome to join our :  <a href='https://discord.gg/EZPUsgFR' target='_blank'>discord server</a> ",
     //------------Component Login-------------
     nbdomain: "NBdomain",
     //------------Component Pay-------------

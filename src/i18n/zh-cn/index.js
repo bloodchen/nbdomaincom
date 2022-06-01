@@ -51,7 +51,7 @@ export default {
     faq_q4: "哪个钱包可以用来操作 NB域名?",
     faq_a4: "您可以使用傲游浏览器中的 VBox 钱包: https://maxthon.com 。更多钱包支持正在增加中...",
     faq_q5: "如果我有更多问题 ?",
-    faq_a5: "欢迎访问我们的 discord 服务器: https://discord.gg/WRcEGjMA ",
+    faq_a5: "欢迎访问我们的 discord 服务器: https://discord.gg/EZPUsgFR ",
     //------------Component Login-------------
     nbdomain: "NB域名",
     //------------Component Pay-------------
