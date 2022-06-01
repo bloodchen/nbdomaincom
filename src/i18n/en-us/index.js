@@ -12,7 +12,6 @@ export default {
 
     //-------------MyDomains-------------------
     account: "Account",
-
     makePublic: "Set as Public",
     makePublicWarning: "'Set it public' means anyone can write value to this domain (it still belong to you.) It cannot be undone. Continue ?",
     clearData: "Clear Existing Data",
@@ -35,7 +34,7 @@ export default {
     freestep3: "Register Vbox cloud account with your mobile phone number",
     freestep4: "Get free NBdomains on every supported blockchains",
     //------------Home-------------------------
-    slogan: "Born for the Decentrolized Web",
+    slogan: "Born for the Decentralized Web",
     slogan1: "Once registered, no yearly renewal required",
     newdomain: "New Domains",
     feature1: "Decentralized domain",

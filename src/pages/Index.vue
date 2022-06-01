@@ -128,6 +128,7 @@
             no-caps
             class="q-px-md q-mx-md bg-primary tc-2"
             :label="t('message.learnmore')"
+            @click="onLearnmore"
           />
         </div>
         <div class="col">
@@ -191,7 +192,9 @@ tools.new_domains().then((domains) => {
   new_domains.value = domains;
   console.log(domains);
 });
-
+function onLearnmore() {
+  window.open("https://doc.nbdomain.com/#/nbnode");
+}
 function submitSearch() {
   router.push("/search?nid=" + queryNid.value);
 }
