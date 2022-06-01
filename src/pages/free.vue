@@ -6,7 +6,7 @@
         style="margin-top: 100px"
       >
         <div class="text-weight-bold font-t32">
-          {{ t("message.freedomain") }}
+          {{ t("message.freeDomain") }}
         </div>
         <div class="q-my-md font-t20">
           {{ t("message.freeTitle") }}
