@@ -194,12 +194,14 @@ Updater.sub((event, data) => {
   }
 });
 function onclick(index) {
-  if (this.activePage == index) return;
+  console.log("onclick:", index);
   const item = this.menuList[index];
   if (item.to) {
+    console.log("1");
     router.push(item.to);
     this.activePage = index;
   } else if (item.url) {
+    console.log("2");
     window.open(item.url);
   }
 }
