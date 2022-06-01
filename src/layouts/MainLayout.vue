@@ -27,7 +27,7 @@
               >{{ t("message.nav2") }}</a
             >
             <a
-              href="https://docs.nbdomain.com"
+              href="https://doc.nbdomain.com"
               target="_blank"
               class="text-white q-mx-lg"
               style="text-decoration: none"
