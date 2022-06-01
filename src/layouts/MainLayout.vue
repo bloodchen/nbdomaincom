@@ -199,7 +199,6 @@ function onclick(index) {
   if (item.to) {
     console.log("1");
     router.push(item.to);
-    this.activePage = index;
   } else if (item.url) {
     console.log("2");
     window.open(item.url);
