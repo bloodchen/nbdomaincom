@@ -185,7 +185,7 @@ const menuList = [
   {
     icon: "forum",
     label: "message.community",
-    url: "https://discord.gg/WRcEGjMA",
+    url: "https://discord.gg/EZPUsgFR",
   },
 ];
 Updater.sub((event, data) => {
