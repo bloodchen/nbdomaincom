@@ -47,7 +47,8 @@
       <q-card-actions class="text-primary" align="stretch">
         <q-btn
           :label="t('message.save')"
-          class="text-white bg-primary text-weight-bold" style="width:100%"
+          class="text-white bg-primary text-weight-bold"
+          style="width: 100%"
           unelevated
           @click="handleUpdate"
         />
@@ -72,7 +73,7 @@ const curDomain = tools.getKV("CurDomain");
 
 function handleUpdate() {
   if (key.value.trim() == "") reutrn;
-  tools.setKV("paycmd", {
+  tools.callPayAction({
     domain: curDomain.domain,
     cmd: "key",
     kv: { [key.value]: val.value },

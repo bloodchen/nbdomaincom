@@ -77,6 +77,7 @@ export default {
     login: "Login",
     logout: "Logout",
     freeDomain: "Free Domain",
+    payment: "Payment",
     name: 'Name',
     value: 'Value',
     update: 'Update',

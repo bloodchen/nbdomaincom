@@ -219,11 +219,6 @@
       </div>
     </q-dialog>
 
-    <!------支付------->
-    <q-dialog v-model="showPayForm" persistent>
-      <PayForm @closePayForm="closePayForm" />
-    </q-dialog>
-
     <!--    子域名 -->
     <q-dialog v-model="showChildDomainUpdate" persistent>
       <ChildDomainUpdate
@@ -247,7 +242,6 @@
 <script setup>
 import { ref, computed } from "vue";
 import { tools, Updater } from "../utils/tools";
-import PayForm from "src/components/PayForm.vue";
 import SellForm from "src/components/SellForm.vue";
 import ChildDomainUpdate from "src/components/ChildDomainUpdate.vue";
 import AddUser from "src/components/addUser.vue";
@@ -261,7 +255,6 @@ const q = useQuasar();
 let showAddPaymail = false,
   showLogin = ref(false),
   showTransferForm = ref(false),
-  showPayForm = ref(false),
   showChildDomainUpdate = ref(false),
   childDomainName = ref(null),
   childDomainValue = ref(null),
@@ -318,7 +311,6 @@ function genPaymailDetail(objPaymail) {
 }
 function closePaymail() {
   showAddPaymail = false;
-  showPay();
 }
 function closeLoginForm() {
   console.log("got closeLoginForm");
@@ -344,11 +336,6 @@ function handleUserUpdate(value, name) {
   userNameValue.value = value === "" ? "" : JSON.stringify(value);
   showUserUpdate.value = true;
 }
-
-function showPay() {
-  showPayForm.value = true;
-}
-
 function onMakePublic() {
   q.dialog({
     title: t("message.confirm"),
@@ -356,11 +343,10 @@ function onMakePublic() {
     cancel: true,
     persistent: true,
   }).onOk(() => {
-    tools.setKV("paycmd", {
+    tools.callPayAction({
       domain: CurDomain.value.domain,
       cmd: "makePublic",
     });
-    showPay();
   });
 }
 // 转让相关
@@ -383,7 +369,6 @@ async function onRefresh() {
 
 function transferDataComplete() {
   showTransferForm.value = false;
-  showPay();
 }
 
 /**
@@ -391,7 +376,6 @@ function transferDataComplete() {
  */
 function acceptDataComplete() {
   showTransferForm.value = false;
-  showPay();
 }
 /**
  * 更新子域名的验证
@@ -399,7 +383,6 @@ function acceptDataComplete() {
 function hideChildDomainUpdate() {
   showChildDomainUpdate.value = false;
   //showVerificationForm = true;
-  showPay();
 }
 
 /**
@@ -407,12 +390,6 @@ function hideChildDomainUpdate() {
  */
 function hideUserUpdate() {
   showUserUpdate.value = false;
-  showPay();
-}
-function closePayForm() {
-  console.log("got closePayForm");
-  showPayForm.value = false;
-  onRefresh();
 }
 </script>
 <style lang="sass">

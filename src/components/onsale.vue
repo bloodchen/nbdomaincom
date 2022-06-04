@@ -109,8 +109,8 @@ function getIcon(domain) {
   if (dd[1] == "a") return "./icons/ar_48.png";
   return "./icons/bsv_48.png";
 }
-async function buyDomain(item) {
-  const regResult = async function (ret) {
+function buyDomain(item) {
+  const regResult = function (ret) {
     console.log("Register result:", ret);
     if (ret.code === 0) {
       q.dialog({
@@ -124,6 +124,7 @@ async function buyDomain(item) {
       });
     }
   };
+  console.log("buyDomain");
   const obj = tools.getKV("CurDomain");
   if (!obj.domain) {
     alert("You must login to a ." + item.domain.split(".")[1] + " NBdomain ");
@@ -138,17 +139,12 @@ async function buyDomain(item) {
     return;
   }
   console.log(obj, item.domain);
-
-  tools.setKV("paycmd", {
+  tools.callPayAction({
     cmd: "buy",
     price: item.sell_info.price,
     domain: obj.domain,
     option: { domain: item.domain },
     callback: regResult,
   });
-  showBuyDomain.value = true;
-}
-function closePayForm() {
-  showBuyDomain.value = false;
 }
 </script>

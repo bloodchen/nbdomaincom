@@ -81,7 +81,85 @@ export class tools {
       return { code: -1, msg: "server error:" + e.message }
     }
   }
+  static async callPayAction(payCmd) {
+    async function handleReply(res) {
+      console.log("got reply:", res)
+      if (payCmd.callback) await payCmd.callback(res)
+    }
+    const cmd = payCmd;
+    console.log("cmd=", payCmd);
+    if (cmd.cmd == "key") {
+      const domain = await tools.nblib.getDomain(cmd.domain);
+      if (domain) {
+        const res =
+          cmd.cmd == "key"
+            ? await domain.updateKey2({ kv: cmd.kv })
+            : await domain.updateUser(cmd.kv);
+        console.log("key cmd result:", res);
+        await handleReply(res);
+      }
+    }
+    if (cmd.cmd == "user") {
+      const domain = await tools.nblib.getDomain(cmd.domain);
+      if (domain) {
+        const res = await domain.updateUser({
+          name: cmd.kv.name,
+          publicKey: cmd.kv.publicKey,
+        });
+        console.log("user cmd result:", res);
+        await handleReply(res);
+      }
+    }
+    if (cmd.cmd == "sell") {
+      const domain = await tools.nblib.getDomain(cmd.domain);
+      if (domain) {
+        const res = await domain.sell(cmd.sell_info);
+        console.log("sell cmd result:", res);
+        await handleReply(res);
+      }
+    }
+    if (cmd.cmd == "buy") {
+      const buyOption = cmd.option;
+      const domain = await tools.nblib.getDomain(cmd.domain);
+      if (domain) {
+        const res = await domain.buy(buyOption);
+        console.log("buy cmd result:", res);
+        await handleReply(res);
+      }
+    }
+    if (cmd.cmd == "reg") {
+      const res = await tools.nblib.registerDomain(cmd.domain);
+      await handleReply(res);
+    }
+    if (cmd.cmd == "pay") {
+      Opay2.pay(cmd, async (ret) => {
+        await handleReply(ret);
+        return false;
+      });
+    }
+    if (cmd.cmd == "makePublic") {
+      const domain = await tools.nblib.getDomain(cmd.domain);
+      if (domain) {
+        const res = await domain.makePublic(cmd.domain);
+        console.log("makePublic result:", res);
+        await handleReply(res);
+      } else {
+        console.error("Failed to get domain:", cmd.domain);
+      }
+    }
 
+    if (cmd.cmd == "sign") {
+      const body = {
+        data_hash: cmd.data_hash,
+        signer: cmd.signer,
+        app_data: cmd.app_data,
+      };
+      Opay2.sign(body, async (ret) => {
+        await handleReply(ret);
+        return { code: 0, id: ret.id };
+      });
+    }
+  }
   static async getTLDInfo() {
     if (tldInfo) return tldInfo;
     tldInfo = await nblib.getTLDinfo();

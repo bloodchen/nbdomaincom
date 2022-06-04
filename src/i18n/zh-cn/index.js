@@ -74,6 +74,7 @@ export default {
     login: "登入",
     logout: "登出",
     freeDomain: "免费域名",
+    payment: "支付",
     name: '名称',
     value: '内容',
     update: '更新',

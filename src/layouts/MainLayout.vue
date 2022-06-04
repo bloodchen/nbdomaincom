@@ -35,7 +35,7 @@
             >
           </div>
           <div class="col-3 row justify-round items-center">
-            <lanuage v-if="!$q.platform.is.mobile" />
+            <SelectLanuage v-if="!$q.platform.is.mobile" />
             <div v-if="!$q.platform.is.mobile">
               <q-btn
                 dense
@@ -107,7 +107,7 @@
 
           <q-separator v-if="menuItem.separator" class="q-my-md" />
         </q-list>
-        <lanuage />
+        <SelectLanuage />
         <div>
           <q-btn
             dense
@@ -145,7 +145,7 @@
 
 <script setup>
 //import { mapState } from "vuex";
-import Lanuage from "src/components/Lanuage.vue";
+import SelectLanuage from "src/components/SelectLanuage.vue";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter, useRoute } from "vue-router";

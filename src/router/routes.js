@@ -4,10 +4,10 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') },
-      { path: 'search', component: () => import('pages/search.vue') },
-      { path: 'free', component: () => import('pages/free.vue') },
-      { path: 'detail', component: () => import('pages/detail.vue') }
+      { path: '', component: () => import('src/pages/HomePage.vue') },
+      { path: 'search', component: () => import('src/pages/SearchDomain.vue') },
+      { path: 'free', component: () => import('src/pages/FreeDomain.vue') },
+      { path: 'detail', component: () => import('src/pages/SetDetail.vue') }
     ]
   },
 

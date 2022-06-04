@@ -8,25 +8,25 @@
 
     <q-card-section>
       <q-form @submit="submitSearch">
-      <q-input
-        outlined
-        dense
-        v-model="domain"
-        type="text"
-        :placeholder="t('message.nbdomain')"
+        <q-input
+          outlined
+          dense
+          v-model="domain"
+          type="text"
+          :placeholder="t('message.nbdomain')"
       /></q-form>
       <div class="text-warning" v-if="status != ''">{{ status }}</div>
     </q-card-section>
 
     <q-card-actions class="text-primary" align="stretch">
-        <q-btn
-          :label="t('message.ok')"
-          class="text-white bg-primary text-weight-bold" style="width:100%"
-          unelevated
-          @click="getDomainInfo(domain)"
-        />
+      <q-btn
+        :label="t('message.ok')"
+        class="text-white bg-primary text-weight-bold"
+        style="width: 100%"
+        unelevated
+        @click="getDomainInfo(domain)"
+      />
     </q-card-actions>
-
   </q-card>
 </template>
 
@@ -78,8 +78,8 @@ function signResult(res) {
   if (res.code == 400) status.value = "user not found";
   else status.value = "verification failed";
 }
-function submitSearch(){
-  getDomainInfo(domain.value)
+function submitSearch() {
+  getDomainInfo(domain.value);
 }
 async function getDomainInfo(domain) {
   if (tools.validate_domain(domain) == false) {
@@ -101,13 +101,13 @@ async function getDomainInfo(domain) {
       siteConfig.noVerify.indexOf(domain) != -1
     ) {
       //no verify
-      tools.setKV("CurDomain", queryResult);
+      tools.callPayAction(queryResult);
       closeLoginForm();
       return;
     }
     let strSign = Date.now().toString();
     hash_to_verify = tools.sha256(strSign);
-    tools.setKV("paycmd", {
+    tools.callPayAction({
       cmd: "sign",
       action: "signin",
       data_hash: hash_to_verify,

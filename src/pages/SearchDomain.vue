@@ -5,7 +5,9 @@
         class="colum col-11 col-sm-11 col-md-8 justify-center"
         style="margin-top: 100px"
       >
-        <div class="text-weight-bold font-t32">{{ t("message.titleSearch") }}</div>
+        <div class="text-weight-bold font-t32">
+          {{ t("message.titleSearch") }}
+        </div>
         <div>
           <q-form
             @submit="submitSearch"
@@ -67,9 +69,7 @@
             :key="result.title"
           >
             <div v-for="item of result.items" :key="item">
-              <div
-                class="row justify-between q-gutter-md items-center q-my-sm"
-              >
+              <div class="row justify-between q-gutter-md items-center q-my-sm">
                 <div class="col-12 col-sm-auto">
                   <img :src="result.icon" style="vertical-align: middle" />
                   <span class="font-t30 q-mx-md">{{ item.domain }}</span>
@@ -79,7 +79,9 @@
                   class="col-7 row justify-end items-center"
                 >
                   <div class="col column q-mx-lg text-right">
-                    <div class="text-primary font-t24">{{ getPrice(item) }}</div>
+                    <div class="text-primary font-t24">
+                      {{ getPrice(item) }}
+                    </div>
                     <div>
                       <q-checkbox
                         v-model="item.agree"
@@ -118,11 +120,11 @@
         </q-tab-panels>
       </div>
     </div>
-    <OnSale/>
+    <OnSale />
     <q-dialog v-model="showBuyDomain" persistent>
       <PayForm :note="note" @closePayForm="closePayForm" />
     </q-dialog>
-     <pageFooter/>
+    <pageFooter />
   </q-page>
 </template>
 
@@ -137,8 +139,8 @@ import { useI18n } from "vue-i18n";
 import { useRouter, useRoute } from "vue-router";
 import { ref } from "vue";
 import PayForm from "src/components/PayForm.vue";
-import OnSale from "src/components/onsale.vue"
-import pageFooter from "src/components/pageFooter.vue"
+import OnSale from "src/components/OnSale.vue";
+import pageFooter from "src/components/pageFooter.vue";
 
 const { t } = useI18n();
 const q = useQuasar();
@@ -162,9 +164,7 @@ let searching = ref(false),
 
 start();
 
-async function start() {
-
-}
+async function start() {}
 function getIcon(domain) {
   const dd = domain.split(".");
   if (dd[1] == "a") return "./icons/ar_48.png";
@@ -173,7 +173,7 @@ function getIcon(domain) {
 function getPrice(item) {
   const domain = item.domain;
   const dd = domain.split(".");
-  return item.price / 100000000 +(dd[1] === "a" ? " AR" : " BSV");
+  return item.price / 100000000 + (dd[1] === "a" ? " AR" : " BSV");
 }
 
 async function search(nid) {
@@ -230,7 +230,7 @@ function regDomain(item) {
     }
   };
   console.log(item);
-  tools.setKV("paycmd", {
+  tools.callPayAction({
     cmd: "reg",
     price: item.price,
     domain: item.domain,

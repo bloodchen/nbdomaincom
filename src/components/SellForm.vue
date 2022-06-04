@@ -50,7 +50,8 @@
       <q-card-actions class="text-primary" align="stretch">
         <q-btn
           :label="t('message.confirm')"
-          class="text-white bg-primary text-weight-bold" style="width:100%"
+          class="text-white bg-primary text-weight-bold"
+          style="width: 100%"
           unelevated
           @click="handleSubmit"
         />
@@ -110,7 +111,7 @@ async function handleSubmit() {
     if (nt != "") {
       sell_info.note = nt;
     }
-    tools.setKV("paycmd", {
+    tools.callPayAction({
       cmd: "sell",
       product: "NBdomain",
       domain: curDomain.domain,

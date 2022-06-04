@@ -69,7 +69,7 @@ const curDomain = tools.getKV("CurDomain");
 
 function handleUpdate() {
   if (key.value.trim() == "") reutrn;
-  tools.setKV("paycmd", {
+  tools.callPayAction({
     domain: curDomain.domain,
     cmd: "user",
     kv: { name: key.value, publicKey: val.value },
