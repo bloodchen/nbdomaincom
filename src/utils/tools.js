@@ -132,7 +132,7 @@ export class tools {
       await handleReply(res);
     }
     if (cmd.cmd == "pay") {
-      Opay2.pay(cmd, async (ret) => {
+      this.opay.pay(cmd, async (ret) => {
         await handleReply(ret);
         return false;
       });
@@ -154,7 +154,7 @@ export class tools {
         signer: cmd.signer,
         app_data: cmd.app_data,
       };
-      Opay2.sign(body, async (ret) => {
+      this.opay.sign(body, async (ret) => {
         await handleReply(ret);
         return { code: 0, id: ret.id };
       });
