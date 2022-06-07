@@ -177,7 +177,7 @@
 </template>
 
 <script setup>
-import { ref } from "@vue/runtime-core";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useQuasar } from "quasar";
 import { tools } from "../utils/tools";
