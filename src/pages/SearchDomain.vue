@@ -173,7 +173,9 @@ function getPrice(item) {
 }
 
 async function search(nid) {
+  nid = nid.trim();
   nid = nid.split(".")[0];
+  if (nid === "" || !nid) return;
   loading.value = true;
   searching.value = true;
   const result = await tools.search_domain(nid);
