@@ -121,9 +121,6 @@
       </div>
     </div>
     <OnSale />
-    <q-dialog v-model="showBuyDomain" persistent>
-      <PayForm :note="note" @closePayForm="closePayForm" />
-    </q-dialog>
     <pageFooter />
   </q-page>
 </template>
@@ -153,8 +150,7 @@ let bsv_items = [];
 
 let result_items = ref([]);
 
-let note = ref(""),
-  showBuyDomain = ref(false);
+let note = ref("");
 let queryNid = ref(route.query.nid ? route.query.nid : null),
   email = "";
 let notifies = new Set(),
@@ -236,11 +232,8 @@ function regDomain(item) {
     domain: item.domain,
     callback: regResult,
   });
-  showBuyDomain.value = true;
 }
-function closePayForm() {
-  showBuyDomain.value = false;
-}
+
 if (queryNid.value != null) submitSearch();
 </script>
 <style lang="sass">
