@@ -98,6 +98,7 @@ export default {
     sell: 'Sell',
     buy: 'Buy',
     type: 'Type',
+    congrat: 'Congratulations',
 
 
 

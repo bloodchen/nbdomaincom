@@ -93,6 +93,7 @@ export default {
     sell: '卖出',
     buy: '购买',
     type: '类型',
+    congrat: '祝贺',
 
 
   }
