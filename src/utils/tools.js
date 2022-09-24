@@ -1,9 +1,6 @@
 
-//const auction_server = "https://app.nbdomain.com/auc";
-//const tool_server = "https://app.nbdomain.com/auc";
 const auction_server = "https://util.nbsite.link/namecheck";
 const tool_server = "https://util.nbsite.link/namecheck";
-//const tool_server = "http://localhost:3001";
 const brandReg_server = "https://tmapi.nbdomain.com";
 const SURL = {
   "placeOrder": auction_server + "/order_notify",
@@ -20,7 +17,7 @@ const SURL = {
     upload_file: brandReg_server + "/brand/v1/upload_file",
     create_order: brandReg_server + "/brand/v1/order/create",
     order_info: brandReg_server + "/brand/v1/order",
-    submit_order: "https://brand-pay.glitch.me/order"
+    submit_order: "https://brand1-pay.glitch.me/order"
   }
 }
 var tldInfo = null;
