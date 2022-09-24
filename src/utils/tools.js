@@ -49,8 +49,8 @@ export class tools {
     this.opay = new Opay2
     this.opay.init({})
     await nblib.init({
-      API: this.siteConfig.nbAPI ? this.siteConfig.nbAPI : "https://tnode.nbdomain.com/api/",
-      adminAPI: "https://tnode.nbdomain.com/admin/",
+      API: this.siteConfig.nbAPI ? this.siteConfig.nbAPI : "https://api.nbdomain.com/api/",
+      adminAPI: "https://api.nbdomain.com/admin/",
       sendByNode: true,
       opay: this.opay,
       enable_write: true,
