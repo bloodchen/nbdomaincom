@@ -30,12 +30,13 @@
         <div class="tc-1 q-my-sm text-weight-bold">
           {{ t("message.value") }}
         </div>
-        <q-input
+        <!--<q-input
           outlined
           v-model="val"
           type="textarea"
           :rules="[(val) => !!val || 'Field is required']"
-        />
+        />-->
+        <div style="height: 300px" id="jsoneditor"></div>
       </q-card-section>
 
       <q-card-section class="q-py-none">
@@ -61,18 +62,52 @@
 import { ref } from "vue";
 import { tools } from "../utils/tools";
 import { useI18n } from "vue-i18n";
+import JSONEditor from "jsoneditor/dist/jsoneditor-minimalist.js";
+import "jsoneditor/dist/jsoneditor.min.css";
+import { onMounted } from "vue";
+import { useQuasar } from "quasar";
+
 const props = defineProps({
   childDomainName: String,
   childDomainValue: String,
 });
+const q = useQuasar();
 const emit = defineEmits(["hideChildDomainUpdate"]);
 const { t } = useI18n();
 let key = ref(props.childDomainName),
   val = ref(props.childDomainValue);
 const curDomain = tools.getKV("CurDomain");
+let jsonEditor = null;
+onMounted(() => {
+  console.log("mounted");
+  var container = document.getElementById("jsoneditor");
+  const options = {
+    mode: "code",
+  };
+  if (!jsonEditor) jsonEditor = new JSONEditor(container, options);
 
-function handleUpdate() {
-  if (key.value.trim() == "") reutrn;
+  if (val.value) jsonEditor.setText(val.value);
+});
+async function alert(){
+  return new Promise(resolve=>{
+    q.dialog({
+        title: t("message.confirm"),
+        message: t("message.jsonNotValid"),
+        cancel: true,
+        persistent: true,
+      }).onOk(()=> resolve('ok'))
+      .onCancel(()=>resolve('cancel'))
+  })
+}
+async function handleUpdate() {
+  const text = jsonEditor.getText();
+  const validate = await jsonEditor.validate();
+  let cancel = false;
+  if (validate.length > 0) {
+    if(await alert()==='cancel') return
+  }
+  if (key.value.trim() == "" || cancel) return;
+  val.value = text;
   tools.callPayAction({
     domain: curDomain.domain,
     cmd: "key",

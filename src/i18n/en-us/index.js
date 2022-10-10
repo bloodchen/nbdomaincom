@@ -20,6 +20,7 @@ export default {
     price: 'Price',
     expireDate: 'Expire Date',
     askLogin: "Please Login",
+    jsonNotValid:"It's not valid JSON. Continue?",
     //------------Search-----------------------
     agree1: "Agree to NBdomain",
     agreement: "Agreement",

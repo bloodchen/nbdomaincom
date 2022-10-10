@@ -363,6 +363,7 @@ async function onRefresh() {
   console.log("readDomain result:", CurDomain.value.domain, result);
   if (code == 0) {
     tools.setKV("CurDomain", result);
+    CurDomain.value = result;
   } else {
   }
 }
