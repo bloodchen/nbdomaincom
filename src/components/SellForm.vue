@@ -65,6 +65,7 @@ import { ref } from "vue";
 import { tools } from "../utils/tools";
 import { useI18n } from "vue-i18n";
 import { useQuasar } from "quasar";
+import { onMounted } from "vue";
 const q = useQuasar();
 const emit = defineEmits(["transferDataComplete", "showPay"]);
 const { t } = useI18n();
@@ -76,8 +77,10 @@ let tab = ref("sell"),
   note = ref(""),
   terr = ref(null),
   clear_data = ref(true);
-const curDomain = tools.getKV("CurDomain");
-
+let curDomain;
+onMounted(()=>{
+  curDomain = tools.getKV("CurDomain");
+})
 async function payResult(res) {
   console.log("transfer result=");
   console.log(res);

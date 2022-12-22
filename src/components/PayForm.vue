@@ -36,7 +36,7 @@ let isPwd = true,
   cmdFee = { total: 0 },
   payCmd = tools.getKV("paycmd");
 console.log(payCmd);
-const opay = tools.opay;
+const dpay = tools.dpay;
 const title = payCmd.cmd == "sign" ? "Verification" : t("message.payment");
 
 onMounted(() => {
@@ -44,8 +44,6 @@ onMounted(() => {
 });
 async function initCMD() {
   const cmd = payCmd;
-  opay.setUI({ border: "0px", background: "white", close: false });
-  opay.changeContainer("pay");
   console.log("cmd=", payCmd);
   if (cmd.cmd == "key") {
     const domain = await tools.nblib.getDomain(cmd.domain);
@@ -91,10 +89,8 @@ async function initCMD() {
     handleReply(res);
   }
   if (cmd.cmd == "pay") {
-    opay.request({ pay_request: { data: cmd } }, (ret) => {
-      handleReply(ret);
-      return false;
-    });
+    const res = await dpay.sendTransaction({ data: cmd });
+    handleReply(res);
   }
   if (cmd.cmd == "makePublic") {
     const domain = await tools.nblib.getDomain(cmd.domain);
@@ -124,9 +120,7 @@ function onCancel() {
   if (payCmd && payCmd.callback) {
     payCmd.callback({ code: -1, message: "Cancelled" });
   }
-  if (opay) {
-    opay.close();
-  }
+  
 }
 function onOK() {
   closePayForm();

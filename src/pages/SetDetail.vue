@@ -5,7 +5,7 @@
       v-if="showLogin"
       style="margin-top: 100px"
     >
-      <LoginForm @closeLoginForm="closeLoginForm" @showPay="showPay" />
+      <LoginForm @closeLoginForm="closeLoginForm" />
     </div>
 
     <div v-else class="row justify-center no-wrap" style="width: 100%">
@@ -134,7 +134,7 @@
               style="border: 1px solid #d3d8d4; opacity: 1; border-radius: 8px"
               v-for="(value, name, index) in keys_of_domain"
               :key="index"
-              @click="handleChildDomainUpdate(value.value, name)"
+              @click="handleChildDomainUpdate(value.v, name)"
             >
               <div class="row">
                 <div
@@ -148,7 +148,7 @@
                   class="q-px-md q-my-md ellipsis col-12"
                   style="max-width: 1000px"
                 >
-                  {{ value.value }}
+                  {{ value.v }}
                 </div>
               </div>
             </div>
@@ -247,10 +247,20 @@ import ChildDomainUpdate from "src/components/ChildDomainUpdate.vue";
 import AddUser from "src/components/addUser.vue";
 import LoginForm from "src/components/LoginForm.vue";
 import pageFooter from "src/components/pageFooter.vue";
-import { useI18n } from "vue-i18n";
-import { useQuasar, Dialog } from "quasar";
-const { t } = useI18n();
 
+import { useI18n } from "vue-i18n";
+import { useQuasar, useMeta } from "quasar";
+import { onMounted } from "vue";
+const { t } = useI18n();
+const metaData = {
+  title: "Manage Domain - NBdomain",
+  script: {
+    coinfly: {
+      src: "https://unpkg.com/coinfly@latest/dist/coinfly.min.js",
+    },
+  },
+};
+useMeta(metaData);
 const q = useQuasar();
 let showAddPaymail = false,
   showLogin = ref(false),
@@ -263,7 +273,7 @@ let showAddPaymail = false,
   userNameValue = ref(null);
 
 let CurDomain = ref({});
-CurDomain.value = tools.getKV("CurDomain");
+
 if (!CurDomain.value?.obj) {
   showLogin.value = true;
 }
@@ -288,6 +298,9 @@ const num_of_keys = computed(() => {
   }
   console.log("get num of keys");
   return Object.keys(CurDomain.value.obj.keys).length;
+});
+onMounted(() => {
+  CurDomain.value = tools.getKV("CurDomain");
 });
 function onHelp() {
   window.open("https://nbdomain.com");
@@ -327,13 +340,13 @@ function handlePaymailClick(name, value) {
 function handleChildDomainUpdate(value, name) {
   console.log(value);
   childDomainName.value = name;
-  childDomainValue.value = value === "" ? "" : JSON.stringify(value);
+  childDomainValue.value = value;
   showChildDomainUpdate.value = true;
 }
 function handleUserUpdate(value, name) {
   console.log(value);
   userName.value = name;
-  userNameValue.value = value === "" ? "" : JSON.stringify(value);
+  userNameValue.value = value;
   showUserUpdate.value = true;
 }
 function onMakePublic() {
@@ -383,7 +396,7 @@ function acceptDataComplete() {
  */
 function hideChildDomainUpdate() {
   showChildDomainUpdate.value = false;
-  //showVerificationForm = true;
+  setTimeout(onRefresh, 30000);
 }
 
 /**
@@ -391,6 +404,7 @@ function hideChildDomainUpdate() {
  */
 function hideUserUpdate() {
   showUserUpdate.value = false;
+  setTimeout(onRefresh, 30000);
 }
 </script>
 <style lang="sass">

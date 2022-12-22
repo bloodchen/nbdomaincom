@@ -13,6 +13,7 @@
           dense
           v-model="domain"
           type="text"
+          autocomplete="on"
           :placeholder="t('message.nbdomain')"
       /></q-form>
       <div class="text-warning" v-if="status != ''">{{ status }}</div>
@@ -44,45 +45,37 @@ let success = false,
   loading = ref(false),
   status = ref(""),
   domain = ref(""),
-  hash_to_verify = "",
+  str_to_verify = "",
   curDomain = {},
   queryResult = {},
   siteConfig = {};
-init();
-async function init() {
-  const res = await fetch("site_config.json");
-  const json = await res.json();
-  siteConfig = json;
-}
 
-function signResult(res) {
+function signResult(res, para) {
   console.log("sign result===========");
-  console.log(res);
+  console.log(res, para);
   if (res.code == 0) {
-    let signed = res.body;
-    let verified = tools.verify(
-      hash_to_verify,
-      signed,
-      curDomain.pubKey,
-      curDomain.domain
-    );
-    if (verified) {
-      console.log("verified:", curDomain);
-      tools.setKV("CurDomain", queryResult);
-      closeLoginForm();
-      return;
-    } else {
-      console.log("verify failed:", curDomain);
-    }
+    let signed = res.value;
+    tools
+      .verify(str_to_verify, signed, para.pubKey, para.chain)
+      .then(verified => {
+        if (verified) {
+          console.log("verified:", curDomain);
+          tools.setKV("CurDomain", queryResult);
+          closeLoginForm();
+          return;
+        } else {
+          console.log("verify failed:", curDomain);
+        }
+        if (res.code == 400) status.value = "user not found";
+        else status.value = "verification failed";
+      });
   }
-  if (res.code == 400) status.value = "user not found";
-  else status.value = "verification failed";
 }
 function submitSearch() {
   getDomainInfo(domain.value);
 }
 async function getDomainInfo(domain) {
-  if (tools.validate_domain(domain) == false) {
+  if ((await tools.inst()).validate_domain(domain) == false) {
     status.value = "not valid domain";
     return;
   }
@@ -105,14 +98,14 @@ async function getDomainInfo(domain) {
       closeLoginForm();
       return;
     }
-    let strSign = Date.now().toString();
-    hash_to_verify = tools.sha256(strSign);
-    tools.callPayAction({
+    str_to_verify = Date.now().toString();
+    await tools.callPayAction({
       cmd: "sign",
       action: "signin",
-      data_hash: hash_to_verify,
-      signer: curDomain.address,
-      app_data: { public_key: result.obj.owner_key },
+      message: str_to_verify,
+      address: curDomain.address,
+      chain: result.chain,
+      para: { pubKey: result.obj.owner_key, chain: result.chain },
       callback: signResult,
     });
     emit("showPay");

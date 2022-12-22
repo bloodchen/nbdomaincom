@@ -83,6 +83,7 @@
       </div>
     </div>
     <pageFooter />
+
   </q-page>
 </template>
 
@@ -101,40 +102,6 @@ import pageFooter from "src/components/pageFooter.vue";
 const { t } = useI18n();
 const isMobile = useQuasar().platform.is.mobile;
 const route = useRoute();
-
-let tab_result = ref("ar");
-let ar_items = ref([]);
-let bsv_items = ref([]);
-
-let note = "",
-  showBuyDomain = false;
-let queryNid = ref(route.query.nid),
-  email = "";
-let notifies = new Set(),
-  regType = 0; //0:can reg 1:already reg 2:not open 3:brand reserve
-let searching = ref(false),
-  loading = ref(false);
-async function search(nid) {
-  loading.value = true;
-  searching.value = true;
-  const result = await tools.search_domain(nid);
-  console.log(result);
-  ar_items.value = result.ar.map((item) => {
-    item.agree = ref(false);
-    item.price = item.price / 100000000;
-    return item;
-  });
-  bsv_items.value = result.bsv.map((item) => {
-    item.agree = ref(false);
-    item.price = item.price / 100000000;
-    return item;
-  });
-  loading.value = false;
-}
-function submitSearch() {
-  search(queryNid.value);
-}
-if (queryNid.value != "") submitSearch();
 </script>
 <style lang="sass">
 .q-tab__label

@@ -56,6 +56,7 @@
 import { ref } from "vue";
 import { tools } from "../utils/tools";
 import { useI18n } from "vue-i18n";
+import { onMounted } from "vue";
 const props = defineProps({
   userName: String,
   value: String,
@@ -65,8 +66,10 @@ const { t } = useI18n();
 let key = ref(props.userName);
 
 let val = props.value ? ref(JSON.parse(props.value).publicKey) : ref("");
-const curDomain = tools.getKV("CurDomain");
-
+let curDomain;
+onMounted(() => {
+  curDomain = tools.getKV("CurDomain");
+});
 function handleUpdate() {
   if (key.value.trim() == "") reutrn;
   tools.callPayAction({

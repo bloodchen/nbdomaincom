@@ -25,7 +25,7 @@
             >
               <template v-slot:after>
                 <q-btn
-                  icon="search"
+                  :icon="matSearch"
                   class="bg-primary tc-2"
                   size="lg"
                   @click="submitSearch"
@@ -121,7 +121,9 @@
       </div>
     </div>
     <OnSale />
+
     <pageFooter />
+    
   </q-page>
 </template>
 
@@ -131,14 +133,20 @@
 //import buyDomain from "../components/buyDomain";
 
 import { tools } from "../utils/tools";
-import { useQuasar } from "quasar";
+import { useQuasar, useMeta } from "quasar";
 import { useI18n } from "vue-i18n";
 import { useRouter, useRoute } from "vue-router";
 import { ref } from "vue";
 import PayForm from "src/components/PayForm.vue";
 import OnSale from "src/components/OnSale.vue";
 import pageFooter from "src/components/pageFooter.vue";
+import { matSearch } from "@quasar/extras/material-icons";
+import { onMounted } from "vue";
 
+const metaData = {
+  title: "Search Domain - NBdomain",
+};
+useMeta(metaData);
 const { t } = useI18n();
 const q = useQuasar();
 const isMobile = q.platform.is.mobile;
@@ -158,9 +166,7 @@ let notifies = new Set(),
 let searching = ref(false),
   loading = ref(false);
 
-start();
 
-async function start() {}
 function getIcon(domain) {
   const dd = domain.split(".");
   if (dd[1] == "a") return "./icons/ar_48.png";
@@ -178,7 +184,7 @@ async function search(nid) {
   if (nid === "" || !nid) return;
   loading.value = true;
   searching.value = true;
-  const result = await tools.search_domain(nid);
+  const result = await (await tools.inst()).search_domain(nid);
   console.log(result);
   ar_items = result.ar.map((item) => {
     item.agree = ref(false);
@@ -210,7 +216,7 @@ function submitSearch() {
   search(queryNid.value);
 }
 
-function regDomain(item) {
+async function regDomain(item) {
   const regResult = async function (ret) {
     console.log("Register result:", ret);
     //const res = await tools.register_domain(ret);
@@ -228,7 +234,7 @@ function regDomain(item) {
     }
   };
   console.log(item);
-  tools.callPayAction({
+  (await tools.inst()).callPayAction({
     cmd: "reg",
     price: item.price,
     domain: item.domain,

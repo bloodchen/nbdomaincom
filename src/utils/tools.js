@@ -1,3 +1,6 @@
+import axios from 'axios'
+import { Notify } from 'quasar'
+
 
 const auction_server = "https://util.nbsite.link/namecheck";
 const tool_server = "https://util.nbsite.link/namecheck";
@@ -20,6 +23,9 @@ const SURL = {
     submit_order: "https://brand1-pay.glitch.me/order"
   }
 }
+export const CONFIG = {
+  nbNode:"https://api.nbdomain.com"
+}
 var tldInfo = null;
 export class Updater {
   static clients = []
@@ -32,39 +38,50 @@ export class Updater {
     }
   }
 }
+async function loadScript(url) {
+  return new Promise(resolve => {
+    var script = document.createElement("script")
+    script.type = "text/javascript";
+    script.onload = function () { resolve(true) };
+    script.onerror = () => { console.error("error loading" + url); resolve(false) }
+    script.src = url;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })
+}
 export class tools {
   static ax = null;
-  static async init() {
-    if (this.inited) return
+  static async inst() {
+    if (this.inited) return tools
     this.inited = true
     console.log("tool init");
-    const res = await fetch("./site_config.json");
-    const json = await res.json();
+    const res = await axios.get("./site_config.json");
+    const json = res.data;
     console.log("site_config:", json);
     this.siteConfig = json;
 
-    this.opay = new Opay2
-    this.opay.init({})
+    this.dpay = new dPay.WalletApp()
+    const nbnode = CONFIG.nbNode
+    this.dpay.init({ appid: "app1.nbdomain.a", bridge: nbnode, debug: true })
+
     await nblib.init({
-      API: this.siteConfig.nbAPI ? this.siteConfig.nbAPI : "https://api.nbdomain.com/api/",
-      adminAPI: "https://api.nbdomain.com/admin/",
-      sendByNode: true,
-      opay: this.opay,
+      nbNode: this.siteConfig.nbNode ? this.siteConfig.nbNode : nbnode,
+      dpay: this.dpay,
       enable_write: true,
       debug: true
     });
     const cf = window.coinfly
-    this.arLib = await cf.create('ar')
-    this.bsvLib = await cf.create('bsv')
-    this.nblib = nblib;
+    tools.arLib = await cf.create('ar')
+    tools.bsvLib = await cf.create('bsv')
+    tools.nblib = nblib;
     console.log("end tool init nblib:");
+    return tools
   }
   static async addEmailToList(email, list) {
     if (!email || !list || email == "" || list == "") return;
     const url = "https://tmapi.nbdomain.com/email-list/v1/add_email?email=" + email + "&list=" + list;
     try {
-      const res = await fetch(url);
-      return await res.json();
+      const res = await axios.get(url);
+      return res.data;
     } catch (e) {
       return { code: -1, msg: "server error:" + e.message }
     }
@@ -72,26 +89,37 @@ export class tools {
   static async removeEmailFromList(email, list) {
     const url = "https://tmapi.nbdomain.com/email-list/v1/remove_email?email=" + email + "&list=" + list;
     try {
-      const res = await fetch(url);
-      return await res.json();
+      const res = await axios.get(url);
+      return res.data;
     } catch (e) {
       return { code: -1, msg: "server error:" + e.message }
     }
   }
+  static async connectWallet() {
+    if (!(await tools.dpay.isConnected())) {
+      const res = await tools.dpay.connect({ permissions: { access: ['ACCESS_ADDRESS', 'SIGN_TRANSACTION'], chains: ['ar', 'bsv'] } });
+      if (res.code != 0) {
+        console.error(res)
+      }
+    }
+  }
   static async callPayAction(payCmd) {
-    async function handleReply(res) {
+    console.log(payCmd)
+    if (!(await tools.dpay.isConnected())) {
+      //await tools.dpay.connect({ permissions: { chains: ['ar', 'bsv'] } });
+      Notify.create({ message: 'Please connect wallet first', position: 'center', color: "warning" })
+      return
+    }
+    async function handleReply(res, para) {
       console.log("got reply:", res)
-      if (payCmd.callback) await payCmd.callback(res)
+      if (payCmd.callback) await payCmd.callback(res, para)
     }
     const cmd = payCmd;
     console.log("cmd=", payCmd);
     if (cmd.cmd == "key") {
       const domain = await tools.nblib.getDomain(cmd.domain);
       if (domain) {
-        const res =
-          cmd.cmd == "key"
-            ? await domain.updateKey2({ kv: cmd.kv })
-            : await domain.updateUser(cmd.kv);
+        const res = await domain.updateKey({ kv: cmd.kv })
         console.log("key cmd result:", res);
         await handleReply(res);
       }
@@ -146,15 +174,8 @@ export class tools {
     }
 
     if (cmd.cmd == "sign") {
-      const body = {
-        data_hash: cmd.data_hash,
-        signer: cmd.signer,
-        app_data: cmd.app_data,
-      };
-      this.opay.sign(body, async (ret) => {
-        await handleReply(ret);
-        return { code: 0, id: ret.id };
-      });
+      const res = await this.dpay.signMessage({ message: cmd.message, address: cmd.address, chain: cmd.chain })
+      await handleReply(res, cmd.para)
     }
   }
   static async getTLDInfo() {
@@ -171,19 +192,14 @@ export class tools {
       console.log("Error Send ACK", e);
     }
   }
-  static sha256(data) {
-    if (tools.opay) {
-      return tools.opay.sha256(data);
-    } else {
-      throw "opay not found";
+  static async verify(data, strSig, strPubKey, chain) {
+    console.log("tools.verify")
+    let lib = tools.bsvLib
+    if (chain === 'ar') {
+      lib = tools.arLib
+      console.log('use ar lib')
     }
-  }
-  static verify(data_hash, strSig, strPubKey, domain) {
-    let lib = this.bsvLib
-    if (domain && domain.split('.')[1] === 'a') {
-      lib = this.arLib
-    }
-    return lib.verify(strPubKey, data_hash, strSig)
+    return await lib.verifyMessage(strPubKey, data, strSig)
 
   }
   static timespan(seconds) {
@@ -213,30 +229,30 @@ export class tools {
   }
 
   static async getExchangeRate() {
-    const res = await fetch("https://api.whatsonchain.com/v1/bsv/main/exchangerate");
-    const json = await res.json();
+    const res = await axios.get("https://api.whatsonchain.com/v1/bsv/main/exchangerate");
+    const json = res.data;
     return json;
   }
   static async new_domains() {
     const url = tool_server + "/new_domain";
-    const res = await fetch(url);
-    return await res.json();
+    const res = await axios.get(url);
+    return res.data;
   }
   static async getFreeDomains() {
-    let res = await fetch(SURL.free);
-    return await res.json();
+    let res = await axios.get(SURL.free);
+    return res.data;
   }
   static async get_news(lan) {
     let url = tool_server + "/news";
     if (lan) url += "?lan=" + lan;
-    const res = await fetch(url);
-    return await res.json();
+    const res = await axios.get(url);
+    return res.data;
   }
   static async search_domain(nid) {
     let url = tool_server + "/search_domain?nid=" + nid;
     try {
-      const res = await fetch(url);
-      return await res.json();
+      const res = await axios.get(url);
+      return res.data;
     } catch (e) {
       console.error(e.message)
       return { ar: [], bsv: [] }

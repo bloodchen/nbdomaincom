@@ -5,7 +5,7 @@
         <div class="text-left tc-1 text-weight-bold font-t18">
           {{ t("message.subDomain") }}
         </div>
-        <q-btn flat v-close-popup round dense icon="close" />
+        <q-btn flat v-close-popup round dense :icon="matClose" />
       </div>
       <q-card-section class="q-pb-none">
         <div class="self-center q-my-sm tc-1 text-weight-bold">
@@ -40,7 +40,7 @@
       </q-card-section>
 
       <q-card-section class="q-py-none">
-        <q-icon name="warning" class="text-red" /><span
+        <q-icon :name="matWarning" class="text-red" /><span
           class="text-bold tc-7 q-mx-sm"
           >{{ t("message.noteDetail") }}</span
         >
@@ -62,10 +62,11 @@
 import { ref } from "vue";
 import { tools } from "../utils/tools";
 import { useI18n } from "vue-i18n";
-import JSONEditor from "jsoneditor/dist/jsoneditor-minimalist.js";
+////import JSONEditor from "jsoneditor/dist/jsoneditor-minimalist.js";
 import "jsoneditor/dist/jsoneditor.min.css";
 import { onMounted } from "vue";
 import { useQuasar } from "quasar";
+import { matClose, matWarning } from "@quasar/extras/material-icons";
 
 const props = defineProps({
   childDomainName: String,
@@ -76,35 +77,41 @@ const emit = defineEmits(["hideChildDomainUpdate"]);
 const { t } = useI18n();
 let key = ref(props.childDomainName),
   val = ref(props.childDomainValue);
-const curDomain = tools.getKV("CurDomain");
+let curDomain = { domain: "" };
 let jsonEditor = null;
-onMounted(() => {
+
+onMounted(async () => {
   console.log("mounted");
+  await tools.inst();
+  const JSONEditor = (await import("jsoneditor/dist/jsoneditor-minimalist.js"))
+    .default;
+  curDomain = tools.getKV("CurDomain");
   var container = document.getElementById("jsoneditor");
   const options = {
     mode: "code",
   };
   if (!jsonEditor) jsonEditor = new JSONEditor(container, options);
-
+  console.log(val.value);
   if (val.value) jsonEditor.setText(val.value);
 });
-async function alert(){
-  return new Promise(resolve=>{
+async function alert() {
+  return new Promise((resolve) => {
     q.dialog({
-        title: t("message.confirm"),
-        message: t("message.jsonNotValid"),
-        cancel: true,
-        persistent: true,
-      }).onOk(()=> resolve('ok'))
-      .onCancel(()=>resolve('cancel'))
-  })
+      title: t("message.confirm"),
+      message: t("message.jsonNotValid"),
+      cancel: true,
+      persistent: true,
+    })
+      .onOk(() => resolve("ok"))
+      .onCancel(() => resolve("cancel"));
+  });
 }
 async function handleUpdate() {
   const text = jsonEditor.getText();
   const validate = await jsonEditor.validate();
   let cancel = false;
   if (validate.length > 0) {
-    if(await alert()==='cancel') return
+    if ((await alert()) === "cancel") return;
   }
   if (key.value.trim() == "" || cancel) return;
   val.value = text;

@@ -1,5 +1,3 @@
 {
-    "noVerify":[
-    ],
-    "nbAPI":"https://api.nbdomain.com/api/"
+  "noVerify": []
 }

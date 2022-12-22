@@ -79,25 +79,27 @@ import { tools } from "../utils/tools";
 import { useI18n } from "vue-i18n";
 import { useQuasar } from "quasar";
 import PayForm from "src/components/PayForm.vue";
+import { onMounted } from "vue";
 const { t } = useI18n();
 const q = useQuasar();
 const onSaleDomains = ref({});
 const showBuyDomain = ref(false);
 let note = ref(""),
   selected_tab = ref(".b");
-start();
-tools.get_onSale().then((res) => {
-  //onSaleDomains.value = res;
-  const all = onSaleDomains.value;
-  for (const item of res) {
-    const tld = "." + item.domain.split(".")[1];
-    if (!all[tld]) all[tld] = [];
-    all[tld].push(item);
-  }
+
+onMounted(async () => {
+  console.log("onsale onMounted...");
+  (await tools.inst()).get_onSale().then((res) => {
+    //onSaleDomains.value = res;
+    const all = onSaleDomains.value;
+    for (const item of res) {
+      const tld = "." + item.domain.split(".")[1];
+      if (!all[tld]) all[tld] = [];
+      all[tld].push(item);
+    }
+  });
 });
-async function start() {
-  console.log("start...");
-}
+
 
 function getPrice(item) {
   const domain = item.domain;

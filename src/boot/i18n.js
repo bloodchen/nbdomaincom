@@ -4,8 +4,9 @@ import messages from 'src/i18n';
 import { tools } from 'src/utils/tools'
 
 export default boot(async ({ app }) => {
-  await tools.init();
+  //await tools.init();
   const i18n = createI18n({
+    legacy: false,
     locale: 'en-us',
     messages
   })

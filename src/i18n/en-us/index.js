@@ -2,8 +2,9 @@ export default {
   message: {
     //-------------MainFrame--------------------
     nav1: "Search Domain",
-    nav2: "Free Domain",
+    nav2: "Manage Domain",
     nav3: "Developer Docs",
+    nav4: "Playground",
     userSupport: "User Support",
     searchDomain: "Search Domain",
     myDomain: "My Domain",
@@ -20,7 +21,7 @@ export default {
     price: 'Price',
     expireDate: 'Expire Date',
     askLogin: "Please Login",
-    jsonNotValid:"It's not valid JSON. Continue?",
+    jsonNotValid: "It's not valid JSON. Continue?",
     //------------Search-----------------------
     agree1: "Agree to NBdomain",
     agreement: "Agreement",
@@ -40,7 +41,7 @@ export default {
     newdomain: "New Domains",
     feature1: "Decentralized domain",
     feature2: "the Identity you Own",
-    feature3: "Support Multiple Blockchains",
+    feature3: "Multiple Blockchains",
     feature4: "Earn crypto by setting up NBdomain nodes",
     detail1: "The DNS servers are decentralized nodes that built by actual users which makes it imposible to block or track down.",
     detail2: "NBdomain is also a DID - Decentralized Identity that can be used to build real dApps",

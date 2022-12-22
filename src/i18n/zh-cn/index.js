@@ -2,7 +2,7 @@ export default {
   message: {
     //-------------MainFrame--------------------
     nav1: "搜索域名",
-    nav2: "免费域名",
+    nav2: "管理域名",
     nav3: "开发者文档",
     userSupport: "用户支持",
     searchDomain: "搜索域名",
@@ -14,7 +14,7 @@ export default {
     account: "账号",
     makePublic: "设为公众域名",
     makePublicWarning: "'公众域名' 意味者任何人都可以设置此域名的内容。（域名还是属于你）. 此操作无法撤销。是否继续？",
-    jsonNotValid:"这不是合法JSON字串，是否继续?",
+    jsonNotValid: "这不是合法JSON字串，是否继续?",
 
 
     //------------Search-----------------------
@@ -39,7 +39,7 @@ export default {
     feature3: "支持多种区块链",
     feature4: "运行 NB域名 节点，赚取加密货币",
     detail1: "域名服务器是由真实用户运行的去中心化节点，无法被屏蔽和跟踪",
-    detail2: "NB域名也是一种DID - 去中心化身份，可以用来打造真正的去中心化应用",
+    detail2: "NB域名是去中心化身份 - DID，可以用来打造真正的去中心化应用",
     detail3: "NB域名支持多种区块链，是目前市场上最灵活的解决方案",
     detail4: "你可以运行 NB域名 节点来帮助系统去中心化，同时赚取加密货币",
     learnmore: "了解更多",

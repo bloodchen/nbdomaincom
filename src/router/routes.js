@@ -7,6 +7,7 @@ const routes = [
       { path: '', component: () => import('src/pages/HomePage.vue') },
       { path: 'search', component: () => import('src/pages/SearchDomain.vue') },
       { path: 'free', component: () => import('src/pages/FreeDomain.vue') },
+      { path: 'play', component: () => import('src/pages/PlayGround.vue') },
       { path: 'detail', component: () => import('src/pages/SetDetail.vue') }
     ]
   },
