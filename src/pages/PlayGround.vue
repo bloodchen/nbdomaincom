@@ -61,58 +61,65 @@ const querys = ref(""),
   loading = ref(false),
   result = ref("");
 const examples = [
-  { title: "Root Domain", input: "nbdomain.a", api: 1 },
-  { title: "Sub Domain", input: "app1.nbdomain.a", api: 1 },
+  { title: "Root Domain", input: { domain: "nbdomain.a" }, api: 1 },
+  { title: "Sub Domain", input: { key: "app1.nbdomain.a" }, api: 1 },
+  {
+    title: "Domain with properties",
+    input: { domain: "102054.a", p1: "apple" },
+    api: 2,
+  },
   { title: "Multiple Domains", input: "app1.nbdomain.a,nbdomain.b", api: 1 },
-  { title: "tag", input: '{"tagname":"appname"}', api: 2 },
+  { title: "tag", input: { tags: { tagname: "appname" } }, api: 2 },
   {
     title: "tags",
-    input: '{"$or":[{"tagname":"appname"},{"tagname":"appid"}]}',
+    input: { tags: { $or: [{ tagname: "appname" }, { tagname: "appid" }] } },
     api: 2,
   },
   {
     title: "tags of domain",
-    input: '{"tagname":"appname","domain":"108114.b"}',
+    input: { tags: { tagname: "appname", domain: "108114.b" } },
     api: 2,
   },
   {
     title: "tags of subdomain",
-    input: '{"tagname":"appname","key":"test998.108114.b"}',
+    input: { tags: { tagname: "appname", key: "test998.108114.b" } },
     api: 2,
   },
   {
     title: "tags with time",
-    input: '{"tagname":"appname","ts":{"$gt":"1234"}}',
+    input: { tags: { tagname: "appname", ts: { $gt: "1234" } } },
     api: 2,
   },
   {
     title: "tags with $and $in",
-    input:
-      '{"$and":[{"tagvalue":"12211"},{"tagname":{"$in":["appname","appid"]}}]}',
+    input: {
+      tags: {
+        $and: [
+          { tagvalue: "12211" },
+          { tagname: { $in: ["appname", "appid"] } },
+        ],
+      },
+    },
     api: 2,
   },
 ];
 let apiUrl = "";
 onMounted(() => {
   console.log("mounted:", CONFIG);
-  apiUrl = CONFIG.nbNode + "/api"; //"http://localhost:9001/api";
+  //apiUrl = CONFIG.nbNode + "/api"; //"http://localhost:9001/api";
+  apiUrl = "http://localhost:9001/api";
 });
 function onExampleClick(id) {
-  const api = examples[id].api === 1 ? apiUrl + "/q/" : apiUrl + "/qt/";
-  queryUrl.value = api + encodeURIComponent(examples[id].input);
-  querys.value = examples[id].input;
+  const api = apiUrl + "/mq/";
+  const value = JSON.stringify(examples[id].input);
+  queryUrl.value = api + encodeURIComponent(value);
+  querys.value = value;
 }
 async function onGo() {
-  let value = null,
-    api = 1;
-  try {
-    value = JSON.parse(querys.value);
-  } catch (e) {
-    api = 2;
-  }
-  console.log(api);
-  const url = api === 2 ? apiUrl + "/q/" : apiUrl + "/qt/";
-  queryUrl.value = url + encodeURIComponent(querys.value);
+  let value = querys.value;
+
+  const url = apiUrl + "/mq/";
+  queryUrl.value = url + encodeURIComponent(value);
 
   const res = await fetch(queryUrl.value);
   result.value = await res.text();
