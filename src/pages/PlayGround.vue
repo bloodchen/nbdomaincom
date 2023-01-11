@@ -106,8 +106,8 @@ const examples = [
 let apiUrl = "";
 onMounted(() => {
   console.log("mounted:", CONFIG);
-  //apiUrl = CONFIG.nbNode + "/api"; //"http://localhost:9001/api";
-  apiUrl = "http://localhost:9001/api";
+  apiUrl = CONFIG.nbNode + "/api"; //"http://localhost:9001/api";
+  //apiUrl = "http://localhost:9001/api";
 });
 function onExampleClick(id) {
   const api = apiUrl + "/mq/";
